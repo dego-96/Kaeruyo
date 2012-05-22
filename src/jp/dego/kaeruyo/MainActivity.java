@@ -1,5 +1,7 @@
 package jp.dego.kaeruyo;
 
+import java.util.Date;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -23,19 +25,19 @@ public class MainActivity extends Activity
 {
     // アドレス帳呼び出し時のリクエストコード
     private static final int PICK_CONTACT = 3;
-    
+
     private static final String PREF_KEY_MAILTYPE = "pref_key_mailtype";
-    
+
     private ContactInfo mContactInfo;
     private boolean MMS;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         InitDisplay();
     }
-    
+
     //
     // Intentから返ってきたときに実行されるメソッド
     //
@@ -43,70 +45,72 @@ public class MainActivity extends Activity
     public void onActivityResult(int reqCode, int resultCode, Intent data)
     {
         super.onActivityResult(reqCode, resultCode, data);
-        
+
         switch (reqCode) {
         case (PICK_CONTACT):
             if (resultCode == Activity.RESULT_OK) {
                 // Intentのデータから連絡先情報を取得
                 getContactInfo(data);
-                
+
                 // SharedPreferenceに連絡先情報を保存
                 saveToSharedPreference();
-                
+
                 // 宛先ボタンの表示を変更
                 setSendToButtonText();
             }
         }
     }
-    
+
     // -----------------------------------------------------------
     // 画面表示に関するメソッド
     // -----------------------------------------------------------
     private void InitDisplay()
     {
         setContentView(R.layout.main);
-        
+
         mContactInfo = new ContactInfo(this);
         if (!"".equals(mContactInfo.getName()))
             setSendToButtonText();
-        
+
         // メールタイプを設定
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         MMS = pref.getBoolean(PREF_KEY_MAILTYPE, true);
         setMailType();
-        
+
         // 初期の件名と本文を設定
         setDefaultText();
     }
-    
+
     private void setDefaultText()
     {
-        String text1 = getString(R.string.default_subject);
-        String text2 = getString(R.string.default_message);
-        EditText et1 = (EditText)findViewById(R.id.EditText_Subject);
-        EditText et2 = (EditText)findViewById(R.id.EditText_Message);
+        // String text1 = getString(R.string.default_subject);
+        String text1 = MessageManager.getDefaultSubject(this);
+        // String text2 = getString(R.string.default_message);
+        String text2 = MessageManager.getDefaultMessage(this);
+        EditText et1 = (EditText) findViewById(R.id.EditText_Subject);
+        EditText et2 = (EditText) findViewById(R.id.EditText_Message);
         et1.setText(text1);
         if (MMS)
             et2.setText(text2);
         else
             et2.setText(text1 + "\n" + text2);
     }
-    
+
     private void setSendToButtonText()
     {
-        Button btn = (Button)findViewById(R.id.Button_SendTo);
+        Button btn = (Button) findViewById(R.id.Button_SendTo);
         String text = mContactInfo.getName();
         btn.setText("宛先 : " + text);
     }
-    
+
     private void setMailType()
     {
-        EditText et = (EditText)findViewById(R.id.EditText_Subject);
+        EditText et = (EditText) findViewById(R.id.EditText_Subject);
         et.setEnabled(MMS);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         pref.edit().putBoolean(PREF_KEY_MAILTYPE, MMS).commit();
     }
-    
+
     // -----------------------------------------------------------
     // ボタンを押したときに呼ばれるメソッド
     // -----------------------------------------------------------
@@ -120,8 +124,7 @@ public class MainActivity extends Activity
         String textCancel = getString(R.string.dialog_button_text_cancel);
         builder.setTitle(title);
         builder.setMessage(message);
-        builder.setPositiveButton(textOK, new OnClickListener()
-        {
+        builder.setPositiveButton(textOK, new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
@@ -133,7 +136,7 @@ public class MainActivity extends Activity
         builder.setNegativeButton(textCancel, null);
         builder.show();
     }
-    
+
     // 送信ボタンをPush
     public void onSendButtonClicked(View view)
     {
@@ -141,32 +144,36 @@ public class MainActivity extends Activity
             // 送信先アドレスの取得
             String address = mContactInfo.getAddress();
             // 件名の取得
-            String subject = ((EditText)findViewById(R.id.EditText_Subject)).getText().toString();
+            String subject = ((EditText) findViewById(R.id.EditText_Subject)).getText().toString();
             // 本文の取得
-            String message = ((EditText)findViewById(R.id.EditText_Message)).getText().toString();
-            
+            String message0 = ((EditText) findViewById(R.id.EditText_Message)).getText().toString();
+
+            Date date = new Date();
+            System.currentTimeMillis();
+            String message = MessageManager.getMessage(message0, date);
+
             // Intentインスタンスを生成
             Intent intent = new Intent();
             // アクションを指定(ACTION_SENDTOではないところがミソ)
             intent.setAction(Intent.ACTION_SEND);
             // データタイプを指定
             intent.setType("message/rfc822");
-            
+
             // 宛先を指定
-            intent.putExtra(Intent.EXTRA_EMAIL, new String[] { address });
+            intent.putExtra(Intent.EXTRA_EMAIL, new String[] {address});
             // 件名を指定
             intent.putExtra(Intent.EXTRA_SUBJECT, subject);
             // 本文を指定
             intent.putExtra(Intent.EXTRA_TEXT, message);
-            
+
             // Intentを発行
             startActivity(intent);
         } else {
             // 電話番号の取得
             String phone = mContactInfo.getPhone();
             // 本文を取得
-            String message = ((EditText)findViewById(R.id.EditText_Message)).getText().toString();
-            
+            String message = ((EditText) findViewById(R.id.EditText_Message)).getText().toString();
+
             Uri uri = Uri.parse("smsto://");
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             intent.setType("vnd.android-dir/mms-sms");
@@ -181,13 +188,13 @@ public class MainActivity extends Activity
             }
         }
     }
-    
+
     // 移動時間ボタンをクリック
     public void onMoveTimeButtonClicked(View view)
-    {   
-        
+    {
+
     }
-    
+
     // -----------------------------------------------------------
     // Menu
     // -----------------------------------------------------------
@@ -198,7 +205,7 @@ public class MainActivity extends Activity
         menu.add(0, Menu.FIRST, 0, menu1);
         return super.onCreateOptionsMenu(menu);
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -224,7 +231,7 @@ public class MainActivity extends Activity
         }
         return true;
     }
-    
+
     // -----------------------------------------------------------
     // 連絡先情報に関するメソッド
     // -----------------------------------------------------------
@@ -246,14 +253,14 @@ public class MainActivity extends Activity
             // Eメールアドレスと電話番号の取得
             c = getContentResolver().query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,
                     null, ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
-                    new String[] { mContactInfo.getId() }, null);
+                    new String[] {mContactInfo.getId()}, null);
             if (c.moveToFirst()) {
                 int emailIndex = c.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA);
                 mContactInfo.setAddress(c.getString(emailIndex));
             }
             c = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                     null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                    new String[] { mContactInfo.getId() }, null);
+                    new String[] {mContactInfo.getId()}, null);
             if (c.moveToFirst()) {
                 int phoneIndex = c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DATA);
                 mContactInfo.setPhone(c.getString(phoneIndex));
@@ -263,12 +270,12 @@ public class MainActivity extends Activity
                 c.close();
         }
     }
-    
+
     // SharedPreferenceに保存
     private void saveToSharedPreference()
     {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        
+
         // IDを保存
         if (!"".equals(mContactInfo.getId()))
             pref.edit().putString(ContactInfo.PREF_KEY_ID, mContactInfo.getId()).commit();
@@ -284,5 +291,5 @@ public class MainActivity extends Activity
         // メールタイプを保存
         pref.edit().putBoolean(PREF_KEY_MAILTYPE, MMS).commit();
     }
-    
+
 }

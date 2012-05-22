@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/Button_SendTo"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onSendToButtonClicked"
+        android:text="@string/button_text_sendto" />
+
+    <Button
+        android:id="@+id/Button_MoveTime"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onMoveTimeButtonClicked"
+        android:text="@string/button_text_move_time" />
+
+    <EditText
+        android:id="@+id/EditText_Subject"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/edittext_hint_subject"
+        android:lines="1" />
+
+    <EditText
+        android:id="@+id/EditText_Message"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:gravity="top"
+        android:hint="@string/edittext_hint_message"
+        android:inputType="textShortMessage" />
+
+    <Button
+        android:id="@+id/Button_Send"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onSendButtonClicked"
+        android:text="@string/button_text_send" />
+
+</LinearLayout>

@@ -11,18 +11,32 @@
         android:onClick="onSendToButtonClicked"
         android:text="@string/button_text_sendto" />
 
-    <Button
-        android:id="@+id/Button_MoveTime"
+    <LinearLayout
+        android:id="@+id/LinearLayout_MoveTime"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:onClick="onMoveTimeButtonClicked"
-        android:text="@string/button_text_move_time" />
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/movetime" />
+
+        <Spinner
+            android:id="@+id/Spinner_MoveTime"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:entries="@array/movetime"
+            android:prompt="@string/movetime_prompt" />
+    </LinearLayout>
 
     <EditText
         android:id="@+id/EditText_Subject"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="@string/edittext_hint_subject"
+        android:inputType="textEmailSubject"
         android:lines="1" />
 
     <EditText
@@ -32,7 +46,12 @@
         android:layout_weight="1"
         android:gravity="top"
         android:hint="@string/edittext_hint_message"
-        android:inputType="textShortMessage" />
+        android:inputType="textLongMessage" />
+    
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/textview_replace_text" />
 
     <Button
         android:id="@+id/Button_Send"

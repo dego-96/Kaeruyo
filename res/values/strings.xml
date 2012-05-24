@@ -11,6 +11,7 @@
     <!-- EditText Text -->
     <string name="edittext_hint_subject">件名</string>
     <string name="edittext_hint_message">本文</string>
+    <string name="textview_replace_text">※[HH:MM]が帰宅時間に置き換えられます。</string>
     <string name="default_subject">これから帰ります。</string>
     <string name="default_message">家には[HH:MM]頃になります。</string>
     <!-- Dialog Text -->
@@ -21,6 +22,9 @@
     <!-- Toast Text -->
     <string name="toast_cannot_use_sms">SMSが使えません</string>
     <!-- Menu Text -->
-    <string name="menu_text_mailtype">メールタイプ</string>
+    <string name="menu_text_mailtype">MMS／SMS</string>
+    <!-- Spinner -->
+    <string name="movetime">移動時間</string>
+    <string name="movetime_prompt">移動時間を選択して下さい</string>
 
 </resources>

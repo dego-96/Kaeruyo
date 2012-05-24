@@ -95,4 +95,26 @@ public class ContactInfo
     {
         this.phone = phone;
     }
+    
+    //
+    // Save to Preference
+    //
+    public void saveInfo(Context context)
+    {
+
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+
+        // IDを保存
+        if (!"".equals(id))
+            pref.edit().putString(ContactInfo.PREF_KEY_ID, id).commit();
+        // 名前を保存
+        if (!"".equals(name))
+            pref.edit().putString(ContactInfo.PREF_KEY_NAME, name).commit();
+        // E-mailアドレスを保存
+        if (!"".equals(address))
+            pref.edit().putString(ContactInfo.PREF_KEY_ADDRESS, address).commit();
+        // 電話番号を保存
+        if (!"".equals(phone))
+            pref.edit().putString(ContactInfo.PREF_KEY_PHONE, phone).commit();
+    }
 }

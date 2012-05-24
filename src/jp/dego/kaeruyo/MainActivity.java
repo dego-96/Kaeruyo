@@ -1,24 +1,21 @@
 package jp.dego.kaeruyo;
 
-import java.util.Date;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 public class MainActivity extends Activity
@@ -26,10 +23,8 @@ public class MainActivity extends Activity
     // アドレス帳呼び出し時のリクエストコード
     private static final int PICK_CONTACT = 3;
 
-    private static final String PREF_KEY_MAILTYPE = "pref_key_mailtype";
-
     private ContactInfo mContactInfo;
-    private boolean MMS;
+    private KitakuInfo mKitakuInfo;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -53,7 +48,7 @@ public class MainActivity extends Activity
                 getContactInfo(data);
 
                 // SharedPreferenceに連絡先情報を保存
-                saveToSharedPreference();
+                mContactInfo.saveInfo(this);
 
                 // 宛先ボタンの表示を変更
                 setSendToButtonText();
@@ -69,46 +64,38 @@ public class MainActivity extends Activity
         setContentView(R.layout.main);
 
         mContactInfo = new ContactInfo(this);
+        mKitakuInfo = new KitakuInfo(this);
+        mKitakuInfo.setInfo(this);
         if (!"".equals(mContactInfo.getName()))
             setSendToButtonText();
-
-        // メールタイプを設定
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        MMS = pref.getBoolean(PREF_KEY_MAILTYPE, true);
-        setMailType();
+        
+        // 移動時間の設定
+        Spinner spinner = (Spinner)findViewById(R.id.Spinner_MoveTime);
+        spinner.setSelection(mKitakuInfo.getMoveTime());
 
         // 初期の件名と本文を設定
-        setDefaultText();
-    }
-
-    private void setDefaultText()
-    {
-        // String text1 = getString(R.string.default_subject);
-        String text1 = MessageManager.getDefaultSubject(this);
-        // String text2 = getString(R.string.default_message);
-        String text2 = MessageManager.getDefaultMessage(this);
-        EditText et1 = (EditText) findViewById(R.id.EditText_Subject);
-        EditText et2 = (EditText) findViewById(R.id.EditText_Message);
+        String text1 = mKitakuInfo.getSubject();
+        String text2 = mKitakuInfo.getMessage();
+        EditText et1 = (EditText)findViewById(R.id.EditText_Subject);
+        EditText et2 = (EditText)findViewById(R.id.EditText_Message);
         et1.setText(text1);
-        if (MMS)
-            et2.setText(text2);
-        else
-            et2.setText(text1 + "\n" + text2);
+        et2.setText(text2);
+        
+        // メールタイプを設定
+        setMailType();
     }
 
     private void setSendToButtonText()
     {
-        Button btn = (Button) findViewById(R.id.Button_SendTo);
+        Button btn = (Button)findViewById(R.id.Button_SendTo);
         String text = mContactInfo.getName();
         btn.setText("宛先 : " + text);
     }
 
     private void setMailType()
     {
-        EditText et = (EditText) findViewById(R.id.EditText_Subject);
-        et.setEnabled(MMS);
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        pref.edit().putBoolean(PREF_KEY_MAILTYPE, MMS).commit();
+        EditText et = (EditText)findViewById(R.id.EditText_Subject);
+        et.setEnabled(mKitakuInfo.isMMS());
     }
 
     // -----------------------------------------------------------
@@ -140,17 +127,25 @@ public class MainActivity extends Activity
     // 送信ボタンをPush
     public void onSendButtonClicked(View view)
     {
-        if (MMS) {
+        // 移動時間を取得
+        int mt = ((Spinner)findViewById(R.id.Spinner_MoveTime)).getSelectedItemPosition();
+        mKitakuInfo.setMoveTime(mt);
+        
+        // 各種情報を保存
+        EditText et1 = (EditText)findViewById(R.id.EditText_Subject);
+        EditText et2 = (EditText)findViewById(R.id.EditText_Message);
+        mKitakuInfo.setSubject(et1.getText().toString());
+        mKitakuInfo.setMessage(et2.getText().toString());
+        mKitakuInfo.saveInfo(this);
+        mContactInfo.saveInfo(this);
+        
+        // 件名と本文を取得
+        String subject = mKitakuInfo.getSubject();
+        String message = MessageManager.getMessage(mKitakuInfo, true);
+
+        if (mKitakuInfo.isMMS()) {
             // 送信先アドレスの取得
             String address = mContactInfo.getAddress();
-            // 件名の取得
-            String subject = ((EditText) findViewById(R.id.EditText_Subject)).getText().toString();
-            // 本文の取得
-            String message0 = ((EditText) findViewById(R.id.EditText_Message)).getText().toString();
-
-            Date date = new Date();
-            System.currentTimeMillis();
-            String message = MessageManager.getMessage(message0, date);
 
             // Intentインスタンスを生成
             Intent intent = new Intent();
@@ -171,8 +166,6 @@ public class MainActivity extends Activity
         } else {
             // 電話番号の取得
             String phone = mContactInfo.getPhone();
-            // 本文を取得
-            String message = ((EditText) findViewById(R.id.EditText_Message)).getText().toString();
 
             Uri uri = Uri.parse("smsto://");
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
@@ -187,12 +180,6 @@ public class MainActivity extends Activity
                 Toast.makeText(this, text, 1).show();
             }
         }
-    }
-
-    // 移動時間ボタンをクリック
-    public void onMoveTimeButtonClicked(View view)
-    {
-
     }
 
     // -----------------------------------------------------------
@@ -211,22 +198,10 @@ public class MainActivity extends Activity
     {
         switch (item.getItemId()) {
         case Menu.FIRST:
-            MMS = !MMS;
+            mKitakuInfo.setMMS(!mKitakuInfo.isMMS());
             setMailType();
             break;
         case Menu.FIRST + 1:
-            // AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            // builder.setTitle("登録した宛先を削除");
-            // String[] items = this.mMyContacts.getNames();
-            // builder.setItems(items, new OnClickListener()
-            // {
-            // @Override
-            // public void onClick(DialogInterface dialog, int which)
-            // {
-            // showConfirmDeleteDialog(which + 1);
-            // }
-            // });
-            // builder.show();
             break;
         }
         return true;
@@ -269,27 +244,6 @@ public class MainActivity extends Activity
             if (c != null)
                 c.close();
         }
-    }
-
-    // SharedPreferenceに保存
-    private void saveToSharedPreference()
-    {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-
-        // IDを保存
-        if (!"".equals(mContactInfo.getId()))
-            pref.edit().putString(ContactInfo.PREF_KEY_ID, mContactInfo.getId()).commit();
-        // 名前を保存
-        if (!"".equals(mContactInfo.getName()))
-            pref.edit().putString(ContactInfo.PREF_KEY_NAME, mContactInfo.getName()).commit();
-        // E-mailアドレスを保存
-        if (!"".equals(mContactInfo.getAddress()))
-            pref.edit().putString(ContactInfo.PREF_KEY_ADDRESS, mContactInfo.getAddress()).commit();
-        // 電話番号を保存
-        if (!"".equals(mContactInfo.getPhone()))
-            pref.edit().putString(ContactInfo.PREF_KEY_PHONE, mContactInfo.getPhone()).commit();
-        // メールタイプを保存
-        pref.edit().putBoolean(PREF_KEY_MAILTYPE, MMS).commit();
     }
 
 }

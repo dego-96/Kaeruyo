@@ -8,6 +8,9 @@
 package jp.dego.kaeruyo;
 
 public final class R {
+    public static final class array {
+        public static final int movetime=0x7f040000;
+    }
     public static final class attr {
     }
     public static final class drawable {
@@ -15,40 +18,46 @@ public final class R {
         public static final int ic_launcher_backup=0x7f020001;
     }
     public static final class id {
-        public static final int Button_MoveTime=0x7f050001;
-        public static final int Button_Send=0x7f050004;
-        public static final int Button_SendTo=0x7f050000;
-        public static final int EditText_Message=0x7f050003;
-        public static final int EditText_Subject=0x7f050002;
+        public static final int Button_Send=0x7f060005;
+        public static final int Button_SendTo=0x7f060000;
+        public static final int EditText_Message=0x7f060004;
+        public static final int EditText_Subject=0x7f060003;
+        public static final int LinearLayout_MoveTime=0x7f060001;
+        public static final int Spinner_MoveTime=0x7f060002;
     }
     public static final class layout {
         public static final int main=0x7f030000;
     }
     public static final class string {
-        public static final int app_name=0x7f040001;
-        public static final int button_text_move_time=0x7f040003;
-        public static final int button_text_send=0x7f040004;
+        public static final int app_name=0x7f050001;
+        public static final int button_text_move_time=0x7f050003;
+        public static final int button_text_send=0x7f050004;
         /**  Button Text 
          */
-        public static final int button_text_sendto=0x7f040002;
-        public static final int default_message=0x7f040008;
-        public static final int default_subject=0x7f040007;
-        public static final int dialog_button_text_cancel=0x7f04000c;
-        public static final int dialog_button_text_ok=0x7f04000b;
-        public static final int dialog_message_change_sendto=0x7f04000a;
+        public static final int button_text_sendto=0x7f050002;
+        public static final int default_message=0x7f050009;
+        public static final int default_subject=0x7f050008;
+        public static final int dialog_button_text_cancel=0x7f05000d;
+        public static final int dialog_button_text_ok=0x7f05000c;
+        public static final int dialog_message_change_sendto=0x7f05000b;
         /**  Dialog Text 
          */
-        public static final int dialog_title_change_sendto=0x7f040009;
-        public static final int edittext_hint_message=0x7f040006;
+        public static final int dialog_title_change_sendto=0x7f05000a;
+        public static final int edittext_hint_message=0x7f050006;
         /**  EditText Text 
          */
-        public static final int edittext_hint_subject=0x7f040005;
-        public static final int hello=0x7f040000;
+        public static final int edittext_hint_subject=0x7f050005;
+        public static final int hello=0x7f050000;
         /**  Menu Text 
          */
-        public static final int menu_text_mailtype=0x7f04000e;
+        public static final int menu_text_mailtype=0x7f05000f;
+        /**  Spinner 
+         */
+        public static final int movetime=0x7f050010;
+        public static final int movetime_prompt=0x7f050011;
+        public static final int textview_replace_text=0x7f050007;
         /**  Toast Text 
          */
-        public static final int toast_cannot_use_sms=0x7f04000d;
+        public static final int toast_cannot_use_sms=0x7f05000e;
     }
 }

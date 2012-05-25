@@ -68,7 +68,7 @@ public class MainActivity extends Activity
         mKitakuInfo.setInfo(this);
         if (!"".equals(mContactInfo.getName()))
             setSendToButtonText();
-        
+
         // 移動時間の設定
         Spinner spinner = (Spinner)findViewById(R.id.Spinner_MoveTime);
         spinner.setSelection(mKitakuInfo.getMoveTime());
@@ -80,7 +80,7 @@ public class MainActivity extends Activity
         EditText et2 = (EditText)findViewById(R.id.EditText_Message);
         et1.setText(text1);
         et2.setText(text2);
-        
+
         // メールタイプを設定
         setMailType();
     }
@@ -130,7 +130,7 @@ public class MainActivity extends Activity
         // 移動時間を取得
         int mt = ((Spinner)findViewById(R.id.Spinner_MoveTime)).getSelectedItemPosition();
         mKitakuInfo.setMoveTime(mt);
-        
+
         // 各種情報を保存
         EditText et1 = (EditText)findViewById(R.id.EditText_Subject);
         EditText et2 = (EditText)findViewById(R.id.EditText_Message);
@@ -138,7 +138,7 @@ public class MainActivity extends Activity
         mKitakuInfo.setMessage(et2.getText().toString());
         mKitakuInfo.saveInfo(this);
         mContactInfo.saveInfo(this);
-        
+
         // 件名と本文を取得
         String subject = mKitakuInfo.getSubject();
         String message = MessageManager.getMessage(mKitakuInfo, true);
@@ -189,7 +189,9 @@ public class MainActivity extends Activity
     public boolean onCreateOptionsMenu(Menu menu)
     {
         String menu1 = getString(R.string.menu_text_mailtype);
+        String menu2 = getString(R.string.menu_text_config);
         menu.add(0, Menu.FIRST, 0, menu1);
+        menu.add(0, Menu.FIRST + 1, 0, menu2).setIcon(android.R.drawable.ic_menu_preferences);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -202,6 +204,8 @@ public class MainActivity extends Activity
             setMailType();
             break;
         case Menu.FIRST + 1:
+            Intent intent = new Intent(MainActivity.this, ConfigActivity.class);
+            startActivity(intent);
             break;
         }
         return true;

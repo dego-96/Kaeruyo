@@ -23,8 +23,14 @@
     <string name="toast_cannot_use_sms">SMSが使えません</string>
     <!-- Menu Text -->
     <string name="menu_text_mailtype">MMS／SMS</string>
+    <string name="menu_text_config">設定</string>
     <!-- Spinner -->
     <string name="movetime">移動時間</string>
     <string name="movetime_prompt">移動時間を選択して下さい</string>
+    <!-- Preference Activity -->
+    <string name="pref_checkbox_title_about">あばうともーど</string>
+    <string name="pref_checkbox_summary_about">帰宅時間を 5 or 10 分単位で指定します</string>
+    <string name="pref_checkbox_title_usesubject">SMSで件名を本文に含める</string>
+    <string name="pref_checkbox_summary_usesubject">SMSモードの時に本文の最初に件名を挿入します</string>
 
 </resources>

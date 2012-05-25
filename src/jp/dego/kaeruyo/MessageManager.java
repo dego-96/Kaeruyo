@@ -4,24 +4,6 @@ import java.util.Date;
 
 public class MessageManager
 {
-    // public static String getMessage(KitakuInfo info)
-    // {
-    // String res = "";
-    // int mt = info.getMoveTime();
-    // Date date = new Date(System.currentTimeMillis() + mt * 60 * 1000);
-    // String gethome = date.getHours() + "時" + date.getMinutes() + "分";
-    // if (info.isMMS()) {
-    // // MMSの場合
-    // res = info.getMessage().replaceAll(KitakuInfo.HHMM, gethome);
-    // } else {
-    // // SMSの場合
-    // res = info.getSubject() + info.getMessage();
-    // res = res.replace(KitakuInfo.HHMM, gethome);
-    // }
-    //
-    // return res;
-    // }
-
     public static String getMessage(KitakuInfo info, boolean about)
     {
         String res = "";

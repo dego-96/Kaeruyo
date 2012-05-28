@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class MessageManager
 {
-    public static String getMessage(KitakuInfo info, boolean about)
+    public static String getMessage(KitakuInfo info, boolean about, boolean use_subj)
     {
         String res = "";
         int mt = PositionToMinute(info.getMoveTime());
@@ -27,7 +27,7 @@ public class MessageManager
             }
         }
         String gethome;
-        if(mm != 0){
+        if (mm != 0) {
             gethome = hh + "時" + mm + "分";
         } else {
             gethome = hh + "時";
@@ -37,8 +37,13 @@ public class MessageManager
             res = info.getMessage().replaceAll(KitakuInfo.HHMM, gethome);
         } else {
             // SMSの場合
-            res = info.getSubject() + info.getMessage();
-            res = res.replace(KitakuInfo.HHMM, gethome);
+            if (use_subj) {
+                res = info.getSubject() + info.getMessage();
+                res = res.replace(KitakuInfo.HHMM, gethome);
+            } else {
+                res = info.getMessage();
+                res = res.replace(KitakuInfo.HHMM, gethome);
+            }
         }
 
         return res;

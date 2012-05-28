@@ -30,42 +30,46 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f060001;
-        public static final int button_text_move_time=0x7f060003;
-        public static final int button_text_send=0x7f060004;
+        public static final int button_text_move_time=0x7f060005;
+        public static final int button_text_send=0x7f060006;
         /**  Button Text 
          */
-        public static final int button_text_sendto=0x7f060002;
-        public static final int default_message=0x7f060009;
-        public static final int default_subject=0x7f060008;
-        public static final int dialog_button_text_cancel=0x7f06000d;
-        public static final int dialog_button_text_ok=0x7f06000c;
-        public static final int dialog_message_change_sendto=0x7f06000b;
+        public static final int button_text_sendto=0x7f060004;
+        public static final int default_message=0x7f06000b;
+        public static final int default_subject=0x7f06000a;
+        public static final int dialog_button_text_cancel=0x7f06000f;
+        public static final int dialog_button_text_ok=0x7f06000e;
+        public static final int dialog_message_change_sendto=0x7f06000d;
         /**  Dialog Text 
          */
-        public static final int dialog_title_change_sendto=0x7f06000a;
-        public static final int edittext_hint_message=0x7f060006;
+        public static final int dialog_title_change_sendto=0x7f06000c;
+        public static final int edittext_hint_message=0x7f060008;
         /**  EditText Text 
          */
-        public static final int edittext_hint_subject=0x7f060005;
+        public static final int edittext_hint_subject=0x7f060007;
         public static final int hello=0x7f060000;
-        public static final int menu_text_config=0x7f060010;
+        public static final int menu_text_config=0x7f060012;
         /**  Menu Text 
          */
-        public static final int menu_text_mailtype=0x7f06000f;
+        public static final int menu_text_mailtype=0x7f060011;
         /**  Spinner 
          */
-        public static final int movetime=0x7f060011;
-        public static final int movetime_prompt=0x7f060012;
-        public static final int pref_checkbox_summary_about=0x7f060014;
-        public static final int pref_checkbox_summary_usesubject=0x7f060016;
+        public static final int movetime=0x7f060013;
+        public static final int movetime_prompt=0x7f060014;
+        public static final int pref_checkbox_summary_about=0x7f060016;
+        public static final int pref_checkbox_summary_usesubject=0x7f060018;
         /**  Preference Activity 
          */
-        public static final int pref_checkbox_title_about=0x7f060013;
-        public static final int pref_checkbox_title_usesubject=0x7f060015;
-        public static final int textview_replace_text=0x7f060007;
+        public static final int pref_checkbox_title_about=0x7f060015;
+        public static final int pref_checkbox_title_usesubject=0x7f060017;
+        /**  Preference Key 
+         */
+        public static final int pref_key_use_aboutmode=0x7f060002;
+        public static final int pref_key_use_subject=0x7f060003;
+        public static final int textview_replace_text=0x7f060009;
         /**  Toast Text 
          */
-        public static final int toast_cannot_use_sms=0x7f06000e;
+        public static final int toast_cannot_use_sms=0x7f060010;
     }
     public static final class xml {
         public static final int pref=0x7f040000;

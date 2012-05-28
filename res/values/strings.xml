@@ -4,6 +4,9 @@
     <string name="hello">Hello World, MainActivity!</string>
     <string name="app_name">かえるよ</string>
 
+    <!-- Preference Key -->
+    <string name="pref_key_use_aboutmode">pref_key_use_aboutmode</string>
+    <string name="pref_key_use_subject">pref_key_use_subject</string>
     <!-- Button Text -->
     <string name="button_text_sendto">宛先を指定する</string>
     <string name="button_text_move_time">移動時間を指定する</string>

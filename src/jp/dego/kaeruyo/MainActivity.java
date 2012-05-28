@@ -6,9 +6,11 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +24,8 @@ public class MainActivity extends Activity
 {
     // アドレス帳呼び出し時のリクエストコード
     private static final int PICK_CONTACT = 3;
+    
+//    private static final String PREF_KEY_USE_ABOUT = "pref_key_about";
 
     private ContactInfo mContactInfo;
     private KitakuInfo mKitakuInfo;
@@ -138,10 +142,15 @@ public class MainActivity extends Activity
         mKitakuInfo.setMessage(et2.getText().toString());
         mKitakuInfo.saveInfo(this);
         mContactInfo.saveInfo(this);
+        
+        // ConfigActivityの情報を取得
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean about = pref.getBoolean(getString(R.string.pref_key_use_aboutmode), true);
+        boolean use_subj = pref.getBoolean(getString(R.string.pref_key_use_subject), true);
 
         // 件名と本文を取得
         String subject = mKitakuInfo.getSubject();
-        String message = MessageManager.getMessage(mKitakuInfo, true);
+        String message = MessageManager.getMessage(mKitakuInfo, about, use_subj);
 
         if (mKitakuInfo.isMMS()) {
             // 送信先アドレスの取得

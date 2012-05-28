@@ -2,11 +2,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <CheckBoxPreference
-        android:key="pref_key_use_about"
+        android:key="@string/pref_key_use_aboutmode"
         android:summary="@string/pref_checkbox_summary_about"
+        android:defaultValue="true"
         android:title="@string/pref_checkbox_title_about" />
     <CheckBoxPreference
-        android:key="pref_key_usesubject"
+        android:key="@string/pref_key_use_subject"
+        android:defaultValue="true"
         android:summary="@string/pref_checkbox_summary_usesubject"
         android:title="@string/pref_checkbox_title_usesubject" />
 

@@ -15,17 +15,20 @@ import android.provider.ContactsContract;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity
 {
     // アドレス帳呼び出し時のリクエストコード
-    private static final int PICK_CONTACT = 3;
-    
-//    private static final String PREF_KEY_USE_ABOUT = "pref_key_about";
+    private static final int INTENT_PICK_CONTACT = 3;
+    // メールアプリ呼び出し時のリクエストコード
+    private static final int INTENT_ACTION_SEND = 1;
 
     private ContactInfo mContactInfo;
     private KitakuInfo mKitakuInfo;
@@ -45,9 +48,9 @@ public class MainActivity extends Activity
     {
         super.onActivityResult(reqCode, resultCode, data);
 
-        switch (reqCode) {
-        case (PICK_CONTACT):
-            if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
+            switch (reqCode) {
+            case (INTENT_PICK_CONTACT):
                 // Intentのデータから連絡先情報を取得
                 getContactInfo(data);
 
@@ -56,6 +59,10 @@ public class MainActivity extends Activity
 
                 // 宛先ボタンの表示を変更
                 setSendToButtonText();
+                break;
+            case (INTENT_ACTION_SEND):
+                finish();
+                break;
             }
         }
     }
@@ -85,8 +92,32 @@ public class MainActivity extends Activity
         et1.setText(text1);
         et2.setText(text2);
 
+        // 帰宅予定時間をテキストビューに表示
+        setGetHomeTime(mKitakuInfo.getMoveTime());
+        
+        // SpinnerにListenerをセット
+        setSpinnerListener();
+
         // メールタイプを設定
         setMailType();
+    }
+
+    private void setSpinnerListener()
+    {
+        Spinner spinner = (Spinner)findViewById(R.id.Spinner_MoveTime);
+        spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                setGetHomeTime(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+
+            }
+        });
     }
 
     private void setSendToButtonText()
@@ -94,6 +125,18 @@ public class MainActivity extends Activity
         Button btn = (Button)findViewById(R.id.Button_SendTo);
         String text = mContactInfo.getName();
         btn.setText("宛先 : " + text);
+    }
+
+    private void setGetHomeTime(int pos)
+    {
+        TextView tv = (TextView)findViewById(R.id.TextView_GetHomeTime);
+        String gethome = getString(R.string.textview_gethometime);
+
+        // ConfigActivityの情報を取得
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean about = pref.getBoolean(getString(R.string.pref_key_use_aboutmode), true);
+
+        tv.setText(gethome + MessageManager.GetHomeTime(pos, about));
     }
 
     private void setMailType()
@@ -121,7 +164,7 @@ public class MainActivity extends Activity
             {
                 Intent intent = new Intent(Intent.ACTION_PICK,
                         ContactsContract.Contacts.CONTENT_URI);
-                startActivityForResult(intent, PICK_CONTACT);
+                startActivityForResult(intent, INTENT_PICK_CONTACT);
             }
         });
         builder.setNegativeButton(textCancel, null);
@@ -142,7 +185,7 @@ public class MainActivity extends Activity
         mKitakuInfo.setMessage(et2.getText().toString());
         mKitakuInfo.saveInfo(this);
         mContactInfo.saveInfo(this);
-        
+
         // ConfigActivityの情報を取得
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean about = pref.getBoolean(getString(R.string.pref_key_use_aboutmode), true);
@@ -171,7 +214,8 @@ public class MainActivity extends Activity
             intent.putExtra(Intent.EXTRA_TEXT, message);
 
             // Intentを発行
-            startActivity(intent);
+            // startActivity(intent);
+            startActivityForResult(intent, INTENT_ACTION_SEND);
         } else {
             // 電話番号の取得
             String phone = mContactInfo.getPhone();
@@ -182,7 +226,9 @@ public class MainActivity extends Activity
             intent.putExtra("address", phone); // 電話番号を入れる
             intent.putExtra("sms_body", message); // 送信メッセージを入れる
             try {
-                startActivity(intent);
+                // Intentを発行
+                // startActivity(intent);
+                startActivityForResult(intent, INTENT_ACTION_SEND);
             } catch (ActivityNotFoundException ex) {
                 // SMSアプリが無いときのエラー処理
                 String text = getString(R.string.toast_cannot_use_sms);

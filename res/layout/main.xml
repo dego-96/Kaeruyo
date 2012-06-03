@@ -49,6 +49,13 @@
         android:inputType="textLongMessage" />
     
     <TextView
+        android:id="@+id/TextView_GetHomeTime"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24dip"
+        android:text="@string/textview_gethometime" />
+    
+    <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/textview_replace_text" />
@@ -59,5 +66,5 @@
         android:layout_height="wrap_content"
         android:onClick="onSendButtonClicked"
         android:text="@string/button_text_send" />
-
+    
 </LinearLayout>

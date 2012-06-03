@@ -97,9 +97,9 @@ public class KitakuInfo
     {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         pref.edit().putString(PREF_KEY_SUBJECT, subject).commit();
-        pref.edit().putString(PREF_KEY_MESSAGE, message);
-        pref.edit().putBoolean(PREF_KEY_MAILTYPE, mms);
-        pref.edit().putInt(PREF_KEY_MOVETIME, movetime);
+        pref.edit().putString(PREF_KEY_MESSAGE, message).commit();
+        pref.edit().putBoolean(PREF_KEY_MAILTYPE, mms).commit();
+        pref.edit().putInt(PREF_KEY_MOVETIME, movetime).commit();
     }
     
 }

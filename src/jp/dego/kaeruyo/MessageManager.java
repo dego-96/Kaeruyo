@@ -4,6 +4,37 @@ import java.util.Date;
 
 public class MessageManager
 {
+    public static String GetHomeTime(int pos, boolean about)
+    {
+        int mt = PositionToMinute(pos);
+        Date date = new Date(System.currentTimeMillis() + mt * 60 * 1000);
+        int hh = date.getHours();
+        int mm = date.getMinutes();
+        if (about) {
+            if (mt < 60) {
+                if (mm % 5 < 5)
+                    mm = mm - (mm % 5) + 5;
+                else
+                    mm = mm - (mm % 5) + 10;
+            } else {
+                if (mm % 10 != 0)
+                    mm = mm - (mm % 10) + 10;
+            }
+            if (mm >= 60) {
+                hh++;
+                mm -= 60;
+            }
+        }
+        String gethome;
+        if (mm != 0) {
+            gethome = hh + "時" + mm + "分";
+        } else {
+            gethome = hh + "時";
+        }
+        
+        return gethome;
+    }
+    
     public static String getMessage(KitakuInfo info, boolean about, boolean use_subj)
     {
         String res = "";
@@ -49,7 +80,7 @@ public class MessageManager
         return res;
     }
 
-    private static int PositionToMinute(int pos)
+    public static int PositionToMinute(int pos)
     {
         if (-1 < pos && pos < 10)
             return 10 + pos * 5;

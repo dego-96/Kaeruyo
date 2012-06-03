@@ -14,9 +14,11 @@
     <!-- EditText Text -->
     <string name="edittext_hint_subject">件名</string>
     <string name="edittext_hint_message">本文</string>
-    <string name="textview_replace_text">※[HH:MM]が帰宅時間に置き換えられます。</string>
     <string name="default_subject">これから帰ります。</string>
     <string name="default_message">家には[HH:MM]頃になります。</string>
+    <!-- TextView Text -->
+    <string name="textview_gethometime">帰宅予定時間:</string>
+    <string name="textview_replace_text">※[HH:MM]が帰宅時間に置き換えられます。</string>
     <!-- Dialog Text -->
     <string name="dialog_title_change_sendto">宛先を変更</string>
     <string name="dialog_message_change_sendto">宛先を変更します。よろしいですか？</string>
